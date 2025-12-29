@@ -19,10 +19,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// IMPORTANT: Use a fixed port so that Angular frontend and test scripts always match.
-// Frontend `environment.ts` is configured to use http://localhost:5005 as backend base URL,
-// so we bind Kestrel explicitly to port 5005 instead of picking a random available port.
-var selectedPort = 5005;
+// IMPORTANT: Use environment variable PORT for production, 5005 for local development
+// Frontend `environment.ts` is configured to use http://localhost:5005 for local dev
+// Production will use the PORT environment variable (set by hosting platform like Render)
+var selectedPort = Environment.GetEnvironmentVariable("PORT") != null 
+    ? int.Parse(Environment.GetEnvironmentVariable("PORT")!) 
+    : 5005;
 builder.Configuration["Hosting:SelectedPort"] = selectedPort.ToString();
 
 builder.WebHost.ConfigureKestrel(options =>
