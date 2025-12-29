@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: marketing-api
+    runtime: dotnet
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: dotnet publish -c Release -o ./publish
+    startCommand: dotnet ./publish/MarketingTaskAPI.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT
+      - key: Jwt__Key
+        value: YourSuperSecretKeyHereThatShouldBeAtLeast32CharactersLong
+      - key: Jwt__Issuer
+        value: ActionMedicalInstitute
+      - key: Jwt__Audience
+        value: MarketingTaskUsers
+      - key: Jwt__ExpirationHours
+        value: 24
+      - key: ConnectionStrings__DefaultConnection
+        value: Server=172.1.3.201;Database=marketing_db;User Id=sa;Password=sql123;MultipleActiveResultSets=true;TrustServerCertificate=true;Encrypt=false;
