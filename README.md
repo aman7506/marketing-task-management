@@ -2,7 +2,9 @@
 
 ## 🎯 Project Overview
 
-**Marketing Task Management System** is a full-stack web application for managing marketing campaigns and field tasks. Built with Angular (Frontend) and .NET 8 (Backend), it enables admins to create and assign tasks to employees, track progress, and manage marketing campaigns with location-based hierarchy.
+A comprehensive full-stack web application for managing marketing campaigns and field tasks. Built with Angular (Frontend) and .NET 8 (Backend), this system enables admins to create and assign tasks to employees, track progress in real-time, and manage marketing campaigns with a hierarchical location-based structure.
+
+**GitHub Repository:** https://github.com/aman7506/marketing-task-management
 
 ---
 
