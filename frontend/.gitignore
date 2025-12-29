@@ -1,0 +1,99 @@
+# ============================================
+# ANGULAR/FRONTEND .gitignore
+# ============================================
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# ===========================================
+# NODE MODULES & DEPENDENCIES
+# ===========================================
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# ===========================================
+# COMPILED OUTPUT
+# ===========================================
+/dist
+/dist-server
+/tmp
+/out-tsc
+/bazel-out
+
+# ===========================================
+# ANGULAR SPECIFIC
+# ===========================================
+# Angular cache
+.angular/
+.angular/cache
+
+# Build artifacts
+*.js.map
+*.css.map
+
+# ===========================================
+# ENVIRONMENT FILES (Sensitive)
+# ===========================================
+# Keep template files, ignore actual environment configs
+# Uncomment below if you have different approach:
+# /src/environments/environment.prod.ts
+# /src/environments/environment.ts
+
+# ===========================================
+# IDEs and Editors
+# ===========================================
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# ===========================================
+# MISC
+# ===========================================
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# ===========================================
+# SYSTEM FILES
+# ===========================================
+# macOS
+.DS_Store
+Thumbs.db
+
+# ===========================================
+# CUSTOM SCRIPTS (Local Only)
+# ===========================================
+# Keep standard scripts, ignore local variations
+start-local*.js
+start-local*.ps1
+start-local*.bat
+*-local.js
+
+# Cleanup and utility scripts (optional - adjust as needed)
+# patch-*.js
+# suppress-*.js
+# util-*.js
+
+# ===========================================
+# LOGS
+# ===========================================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*

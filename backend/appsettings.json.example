@@ -1,0 +1,32 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=YOUR_SERVER_HERE;Database=marketing_db;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;MultipleActiveResultSets=true;TrustServerCertificate=true;Encrypt=false;"
+  },
+  "Jwt": {
+    "Key": "REPLACE_WITH_YOUR_SECRET_KEY_AT_LEAST_32_CHARACTERS_LONG",
+    "Issuer": "ActionMedicalInstitute",
+    "Audience": "MarketingTaskUsers",
+    "ExpirationHours": 24
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "Cors": {
+    "AllowedOrigins": [
+      "http://localhost:4200",
+      "https://your-frontend-domain.netlify.app"
+    ]
+  },
+  "Hosting": {
+    "PreferredPorts": [
+      5005,
+      5000,
+      5001,
+      5002
+    ]
+  }
+}

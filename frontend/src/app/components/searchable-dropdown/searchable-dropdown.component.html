@@ -1,0 +1,136 @@
+<!-- Searchable Dropdown Component -->
+<div class="searchable-dropdown"
+     [class.disabled]="disabled"
+     [class.readonly]="readonly"
+     [class.open]="isOpen"
+     [id]="id"
+     (keydown)="onKeyDown($event)"
+     tabindex="0">
+  
+  <!-- Dropdown Trigger -->
+  <div class="dropdown-trigger"
+       (click)="!readonly && toggleDropdown()"
+       [class.has-value]="selectedValues.length > 0">
+    
+    <!-- Selected Values Display -->
+    <div class="selected-values" *ngIf="!multiple || selectedValues.length <= 3">
+      <span class="display-text" [class.placeholder]="selectedValues.length === 0">
+        {{ getDisplayText() }}
+      </span>
+    </div>
+
+    <!-- Multiple Selection Tags -->
+    <div class="selected-tags" *ngIf="multiple && selectedValues.length > 0 && selectedValues.length <= 3">
+      <span class="tag" *ngFor="let value of selectedValues; let i = index">
+        {{ getSelectedLabels()[i] }}
+        <i class="bi bi-x tag-remove"
+           (click)="removeSelection(value, $event)"
+           *ngIf="!disabled && !readonly"></i>
+      </span>
+    </div>
+
+    <!-- Multiple Selection Count -->
+    <div class="selection-count" *ngIf="multiple && selectedValues.length > 3">
+      <span class="count-badge">{{ selectedValues.length }} selected</span>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-indicator" *ngIf="loading">
+      <i class="bi bi-arrow-clockwise spin"></i>
+    </div>
+
+    <!-- Clear Button -->
+    <button type="button"
+            class="clear-button"
+            *ngIf="clearable && selectedValues.length > 0 && !disabled && !loading && !readonly"
+            (click)="clearAll($event)"
+            tabindex="-1">
+      <i class="bi bi-x"></i>
+    </button>
+
+    <!-- Dropdown Arrow -->
+    <div class="dropdown-arrow" *ngIf="!loading">
+      <i class="bi bi-chevron-down" [class.rotated]="isOpen"></i>
+    </div>
+  </div>
+
+  <!-- Dropdown Menu -->
+  <div class="dropdown-menu" 
+       *ngIf="isOpen"
+       [style.max-height]="maxHeight"
+       (click)="$event.stopPropagation()">
+    
+    <!-- Search Input -->
+    <div class="dropdown-search">
+      <div class="search-input-wrapper">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text"
+               class="search-input"
+               [placeholder]="searchPlaceholder"
+               [(ngModel)]="searchTerm"
+               (input)="onSearchInput($event)"
+               (keydown)="onKeyDown($event)"
+               [disabled]="readonly">
+        <i class="bi bi-x clear-search"
+           *ngIf="searchTerm"
+           (click)="!readonly && clearSearch()"></i>
+      </div>
+    </div>
+
+    <!-- Options List -->
+    <div class="dropdown-options" *ngIf="filteredOptions.length > 0">
+      <div class="dropdown-option"
+           *ngFor="let option of filteredOptions; let i = index"
+           [class.selected]="isSelected(option.value)"
+           [class.disabled]="option.disabled"
+           [class.highlighted]="i === highlightedIndex"
+           (click)="!readonly && selectOption(option)"
+           (mouseenter)="highlightedIndex = i">
+        
+        <!-- Checkbox for multiple selection -->
+        <div class="option-checkbox" *ngIf="multiple">
+          <i class="bi bi-check-square-fill" *ngIf="isSelected(option.value)"></i>
+          <i class="bi bi-square" *ngIf="!isSelected(option.value)"></i>
+        </div>
+
+        <!-- Option Content -->
+        <div class="option-content">
+          <span class="option-label" [innerHTML]="highlightSearchTerm(option.label)"></span>
+          <small class="option-group" *ngIf="option.group">{{ option.group }}</small>
+        </div>
+
+        <!-- Selection Indicator for single selection -->
+        <div class="selection-indicator" *ngIf="!multiple && isSelected(option.value)">
+          <i class="bi bi-check"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Value Option -->
+    <div class="dropdown-option custom-value" 
+         *ngIf="allowCustomValue && searchTerm.trim() && filteredOptions.length === 0"
+         (click)="addCustomValue()">
+      <div class="option-content">
+        <i class="bi bi-plus-circle me-2"></i>
+        <span [innerHTML]="customValueText.replace('{searchTerm}', '<strong>' + searchTerm + '</strong>')"></span>
+      </div>
+    </div>
+
+    <!-- No Options Message -->
+    <div class="no-options" *ngIf="filteredOptions.length === 0 && (!allowCustomValue || !searchTerm.trim())">
+      <i class="bi bi-search me-2"></i>
+      {{ noOptionsText }}
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+      <i class="bi bi-arrow-clockwise spin me-2"></i>
+      Loading options...
+    </div>
+  </div>
+
+  <!-- Backdrop -->
+  <div class="dropdown-backdrop" 
+       *ngIf="isOpen" 
+       (click)="closeDropdown()"></div>
+</div>

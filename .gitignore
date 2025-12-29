@@ -1,0 +1,230 @@
+# ============================================
+# ROOT .gitignore for Marketing Task Management System
+# ============================================
+# This file prevents sensitive files, build artifacts, and 
+# temporary files from being committed to Git
+# ============================================
+
+# ===========================================
+# SENSITIVE FILES - NEVER COMMIT THESE!
+# ===========================================
+# These contain passwords, secrets, and credentials
+appsettings.json
+appsettings.*.json
+!appsettings.Development.json.example
+*.env
+.env
+.env.local
+.env.production
+*.secret
+secrets.json
+web.config
+!web.config.example
+
+# Database connection strings
+connectionstrings.json
+
+# JWT Keys
+jwtconfig.json
+
+# ===========================================
+# VISUAL STUDIO / .NET
+# ===========================================
+## Build Results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio cache/options
+.vs/
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## NuGet Packages
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Build results
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+ServiceFabricBackup/
+*.rptproj.bak
+
+# ===========================================
+# ANGULAR / NODE.JS
+# ===========================================
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+dist-server/
+tmp/
+out-tsc/
+.angular/
+/frontend/.angular/
+/frontend/dist/
+
+# Angular cache
+.angular/cache
+.sass-cache/
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# ===========================================
+# OPERATING SYSTEM FILES
+# ===========================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ===========================================
+# DATABASE FILES
+# ===========================================
+# Don't commit actual database files
+*.mdf
+*.ldf
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+
+# Database backups (keep scripts only)
+*.bak
+*.backup
+
+# ===========================================
+# LOG FILES
+# ===========================================
+*.log
+logs/
+*.log.*
+npm-debug.log*
+backend_log.txt
+frontend_log.txt
+
+# ===========================================
+# TEMP & CACHE FILES
+# ===========================================
+.cache/
+*.tmp
+*.temp
+~$*
+*.swp
+*.swo
+
+# ===========================================
+# BATCH & SCRIPT FILES (Optional - Adjust as needed)
+# ===========================================
+# Keep startup scripts but ignore local variations
+# If you have local-only scripts, add them here:
+start-local-*.bat
+start-local-*.ps1
+
+# ===========================================
+# DEPLOYMENT & BUILD ARTIFACTS
+# ===========================================
+publish/
+*.Publish.xml
+*.pubxml
+*.publishproj
+PublishScripts/
+
+# NuGet Symbol Packages
+*.snupkg
+
+# Azure deployments
+*.azurePubxml
+
+# ===========================================
+# DOCUMENTATION BACKUP FILES
+# ===========================================
+# Keep actual docs, but not backups
+*.md.backup
+*.md.bak
+*.backup
+
+# ===========================================
+# TYPESCRIPT
+# ===========================================
+*.tsbuildinfo
+
+# ===========================================
+# MISCELLANEOUS
+# ===========================================
+.terraform/
+*.tfstate
+*.tfstate.backup
+.vagrant/
+
+# E2E Testing
+/e2e/*.js
+/e2e/*.map
+
+# System Files
+.DS_Store
+
+# ===========================================
+# CUSTOM PROJECT FILES
+# ===========================================
+# Add any project-specific files here
+query
+start
+test-campaign-payload.json

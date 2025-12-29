@@ -1,0 +1,86 @@
+<div class="location-selector">
+    <form [formGroup]="locationForm">
+        <!-- State Dropdown -->
+        <div class="form-group">
+            <label for="state">
+                <i class="bi bi-geo-alt"></i> State
+                <span class="required" *ngIf="required">*</span>
+            </label>
+            <select id="state" class="form-control" formControlName="stateId"
+                (change)="onStateChange($any($event.target).value)"
+                [class.is-invalid]="locationForm.get('stateId')?.invalid && locationForm.get('stateId')?.touched">
+                <option [ngValue]="null">-- Select State --</option>
+                <option *ngFor="let state of states" [ngValue]="state.id">
+                    {{ state.name }}
+                </option>
+            </select>
+            <div class="invalid-feedback"
+                *ngIf="locationForm.get('stateId')?.invalid && locationForm.get('stateId')?.touched">
+                State is required
+            </div>
+            <div class="spinner-border spinner-border-sm text-primary" *ngIf="loading.states"></div>
+        </div>
+
+        <!-- City Dropdown -->
+        <div class="form-group">
+            <label for="city">
+                <i class="bi bi-building"></i> City
+                <span class="required" *ngIf="required">*</span>
+            </label>
+            <select id="city" class="form-control" formControlName="cityId"
+                (change)="onCityChange($any($event.target).value)"
+                [class.is-invalid]="locationForm.get('cityId')?.invalid && locationForm.get('cityId')?.touched">
+                <option [ngValue]="null">-- Select City --</option>
+                <option *ngFor="let city of cities" [ngValue]="city.id">
+                    {{ city.name }}
+                </option>
+            </select>
+            <div class="invalid-feedback"
+                *ngIf="locationForm.get('cityId')?.invalid && locationForm.get('cityId')?.touched">
+                City is required
+            </div>
+            <div class="spinner-border spinner-border-sm text-primary" *ngIf="loading.cities"></div>
+        </div>
+
+        <!-- Locality Dropdown -->
+        <div class="form-group">
+            <label for="locality">
+                <i class="bi bi-map"></i> Locality
+                <span class="required" *ngIf="required">*</span>
+            </label>
+            <select id="locality" class="form-control" formControlName="localityId"
+                (change)="onLocalityChange($any($event.target).value)"
+                [class.is-invalid]="locationForm.get('localityId')?.invalid && locationForm.get('localityId')?.touched">
+                <option [ngValue]="null">-- Select Locality --</option>
+                <option *ngFor="let locality of localities" [ngValue]="locality.id">
+                    {{ locality.name }}
+                </option>
+            </select>
+            <div class="invalid-feedback"
+                *ngIf="locationForm.get('localityId')?.invalid && locationForm.get('localityId')?.touched">
+                Locality is required
+            </div>
+            <div class="spinner-border spinner-border-sm text-primary" *ngIf="loading.localities"></div>
+        </div>
+
+        <!-- Pincode Dropdown -->
+        <div class="form-group">
+            <label for="pincode">
+                <i class="bi bi-pin-map"></i> Pincode
+                <span class="required" *ngIf="required">*</span>
+            </label>
+            <select id="pincode" class="form-control" formControlName="pincodeId"
+                [class.is-invalid]="locationForm.get('pincodeId')?.invalid && locationForm.get('pincodeId')?.touched">
+                <option [ngValue]="null">-- Select Pincode --</option>
+                <option *ngFor="let pincode of pincodes" [ngValue]="pincode.id">
+                    {{ pincode.value }} <span *ngIf="pincode.localityName">({{ pincode.localityName }})</span>
+                </option>
+            </select>
+            <div class="invalid-feedback"
+                *ngIf="locationForm.get('pincodeId')?.invalid && locationForm.get('pincodeId')?.touched">
+                Pincode is required
+            </div>
+            <div class="spinner-border spinner-border-sm text-primary" *ngIf="loading.pincodes"></div>
+        </div>
+    </form>
+</div>

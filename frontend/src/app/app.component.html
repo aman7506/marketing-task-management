@@ -1,0 +1,52 @@
+<!-- Hospital Header -->
+<header class="hospital-header">
+  <div class="header-container">
+    <div class="hospital-branding">
+      <img src="assets/hospital logo strip.jpg" alt="Sri Balaji Action Medical Institute & Action Cancer Hospital" class="header-logo" loading="lazy">
+      <div class="hospital-info">
+        <h1 class="hospital-name">Sri Balaji Action Medical Institute & Action Cancer Hospital</h1>
+        <p class="hospital-tagline">Excellence in Healthcare & Medical Services</p>
+      </div>
+    </div>
+    
+    <!-- User Info Section (only show when logged in). Removed empty user-info to eliminate blank space -->
+    <div class="user-section" *ngIf="authService.isLoggedIn()">
+      <div class="notification-area">
+        <div class="notification-badge" *ngIf="notificationCount > 0" (click)="openNotifications()">
+          <span class="badge">{{ notificationCount }}</span>
+          <span class="notification-icon">🔔</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Navigation -->
+<nav class="main-nav" *ngIf="authService.isLoggedIn()">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <span class="brand-icon">📋</span>
+      Marketing Task Management System
+    </div>
+    <div class="nav-links">
+      <a [routerLink]="authService.isAdmin() ? '/admin/dashboard' : '/employee/dashboard'" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        Dashboard
+      </a>
+
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Notification Toast -->
+<div class="notification-toast" *ngIf="showNotification" [@slideInOut]="showNotification ? 'in' : 'out'">
+  <div class="toast-content">
+    <span class="toast-message">{{ notificationMessage }}</span>
+    <button class="toast-close" (click)="closeNotification()">×</button>
+  </div>
+</div>

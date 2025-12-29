@@ -1,0 +1,128 @@
+<div class="task-form-container">
+  <h2>Marketing Task Assignment Form</h2>
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="employeeId">Employee Name *</label>
+        <select id="employeeId" formControlName="employeeId" required>
+          <option value="">Select Employee</option>
+          <option *ngFor="let employee of employees" [value]="employee.employeeId">
+            {{ employee.name }} ({{ employee.designation }})
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="employeeCode">Employee Code *</label>
+        <input type="text" id="employeeCode" formControlName="employeeCode" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="consultantName">Consultant Name *</label>
+        <input type="text" id="consultantName" formControlName="consultantName" required>
+      </div>
+
+      <div classdiv class="form-group">
+        <label for="campCode">Camp Code *</label>
+        <input type="text" id="campCode" formControlName="campCode" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="taskDate">Task Date *</label>
+        <input type="date" id="taskDate" formControlName="taskDate" required>
+      </div>
+
+      <div class="form-group">
+        <label for="deadline">Task Deadline *</label>
+        <input type="date" id="deadline" formControlName="deadline" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="priority">Priority *</label>
+        <select id="priority" formControlName="priority" required>
+          <option value="Low">Low</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="isUrgent">Is Urgent?</label>
+        <input type="checkbox" id="isUrgent" formControlName="isUrgent">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Task Types *</label>
+      <div class="checkbox-group">
+        <div *ngFor="let taskType of taskTypes" class="checkbox-item">
+          <input 
+            type="checkbox" 
+            [id]="'taskType' + taskType.taskTypeId"
+            (change)="toggleTaskType(taskType.taskTypeId)"
+            [checked]="isTaskTypeSelected(taskType.taskTypeId)">
+          <label [for]="'taskType' + taskType.taskTypeId">{{ taskType.typeName }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Locations *</label>
+      <div class="checkbox-group">
+        <div *ngFor="let location of locations" class="checkbox-item">
+          <input 
+            type="checkbox" 
+            [id]="'location' + location.locationId"
+            (change)="toggleLocation(location.locationId)"
+            [checked]="isLocationSelected(location.locationId)">
+          <label [for]="'location' + location.locationId">{{ location.locationName }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="customLocation">Custom Location (if not in list)</label>
+      <input type="text" id="customLocation" formControlName="customLocation">
+    </div>
+
+    <div class="form-group">
+      <label for="description">Task Description / Purpose *</label>
+      <textarea id="description" formControlName="description" rows="4" required></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="estimatedHours">Estimated Hours</label>
+        <input type="number" id="estimatedHours" formControlName="estimatedHours" step="0.5">
+      </div>
+
+      <div class="form-group">
+        <label for="actualHours">Actual Hours</label>
+        <input type="number" id="actualHours" formControlName="actualHours" step="0.5">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="additionalNotes">Additional Notes</label>
+      <textarea id="additionalNotes" formControlName="additionalNotes" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="consultantFeedback">Consultant Feedback / Remark</label>
+      <textarea id="consultantFeedback" formControlName="consultantFeedback" rows="3"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="taskForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Submitting...' : 'Assign Task' }}
+      </button>
+      <button type="button" (click)="taskForm.reset()">Reset</button>
+    </div>
+  </form>
+</div>

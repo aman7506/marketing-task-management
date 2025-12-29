@@ -1,0 +1,57 @@
+<!-- Hospital Name Header -->
+<div class="hospital-name">
+  <h2>Sri Balaji Action Medical Institute & Action Cancer Hospital</h2>
+</div>
+
+<!-- Task Creation Section -->
+<div class="task-section mb-4">
+  <button class="btn btn-primary" (click)="openCreateTaskModal()">Create Task</button>
+</div>
+
+<!-- Tasks Table -->
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Description</th>
+        <th>Employee</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Deadline</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td>{{ task.taskId }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.employeeName }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.deadline | date }}</td>
+        <td>
+          <button class="btn btn-sm btn-info me-2" (click)="viewTask(task)">View</button>
+          <button class="btn btn-sm btn-warning me-2" (click)="editTask(task)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteTask(task)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<style>
+.hospital-name {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.hospital-name h2 {
+  font-size: 24px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>

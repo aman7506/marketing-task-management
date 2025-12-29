@@ -1,0 +1,138 @@
+<div class="task-detail-container">
+  <div class="task-header">
+    <h2 class="task-title">
+      <span class="status-badge" [ngClass]="getStatusClass(task.status)">{{ task.status }}</span>
+      {{ task.description }}
+    </h2>
+    <div class="task-meta">
+      <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }} Priority</span>
+      <span class="task-id">Task ID: #{{ task.taskId }}</span>
+      <span class="created-date">Created: {{ task.createdAt | date:'mediumDate' }}</span>
+    </div>
+  </div>
+
+  <div class="task-info-grid">
+    <!-- Employee Information -->
+    <div class="info-section">
+      <h3>Assigned To</h3>
+      <div class="info-item">
+        <label>Name:</label>
+        <span>{{ task.employeeName }}</span>
+      </div>
+      <div class="info-item">
+        <label>Designation:</label>
+        <span>{{ task.employeeDesignation }}</span>
+      </div>
+      <div class="info-item">
+        <label>Contact:</label>
+        <span>{{ task.employeeContact }}</span>
+      </div>
+    </div>
+
+    <!-- Task Dates -->
+    <div class="info-section">
+      <h3>Dates</h3>
+      <div class="info-item">
+        <label>Task Date:</label>
+        <span>{{ task.taskDate | date:'mediumDate' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Deadline:</label>
+        <span>{{ task.deadline | date:'mediumDate' }}</span>
+      </div>
+      <div class="info-item" *ngIf="task.isUrgent">
+        <label>Status:</label>
+        <span class="urgent">Urgent Task</span>
+      </div>
+    </div>
+
+    <!-- Location Information -->
+    <div class="info-section">
+      <h3>Location</h3>
+      <div class="info-item" *ngIf="task.customLocation">
+        <label>Custom Location:</label>
+        <span>{{ task.customLocation }}</span>
+      </div>
+      <div class="info-item" *ngIf="task.locationName">
+        <label>Location:</label>
+        <span>{{ task.locationName }}</span>
+      </div>
+      <div class="info-item" *ngIf="task.areaName">
+        <label>Area:</label>
+        <span>{{ task.areaName }}</span>
+      </div>
+      <div class="info-item" *ngIf="task.cityName">
+        <label>City:</label>
+        <span>{{ task.cityName }}</span>
+      </div>
+      <div class="info-item" *ngIf="task.stateName">
+        <label>State:</label>
+        <span>{{ task.stateName }}</span>
+      </div>
+      <div class="info-item" *ngIf="task.pincodeValue">
+        <label>Pincode:</label>
+        <span>{{ task.pincodeValue }}</span>
+      </div>
+    </div>
+
+    <!-- Task Details -->
+    <div class="info-section full-width">
+      <h3>Task Details</h3>
+      <div class="info-item">
+        <label>Type:</label>
+        <span>{{ task.taskType }}</span>
+      </div>
+      <div class="info-item">
+        <label>Department:</label>
+        <span>{{ task.department }}</span>
+      </div>
+      <div class="info-item">
+        <label>Category:</label>
+        <span>{{ task.taskCategory }}</span>
+      </div>
+      <div class="info-item">
+        <label>Client:</label>
+        <span>{{ task.clientName || 'N/A' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Project Code:</label>
+        <span>{{ task.projectCode || 'N/A' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Estimated Hours:</label>
+        <span>{{ task.estimatedHours || 'N/A' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Actual Hours:</label>
+        <span>{{ task.actualHours || 'N/A' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="description-section">
+    <h3>Description</h3>
+    <p class="task-description">{{ task.description }}</p>
+  </div>
+
+  <!-- Additional Notes -->
+  <div class="notes-section" *ngIf="task.additionalNotes">
+    <h3>Additional Notes</h3>
+    <p class="task-notes">{{ task.additionalNotes }}</p>
+  </div>
+
+  <!-- Assigned By -->
+  <div class="assigned-section">
+    <h3>Assigned By</h3>
+    <p>{{ task.assignedByUserName }} on {{ task.createdAt | date:'mediumDate' }}</p>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons" *ngIf="canEdit">
+    <button class="btn-edit" (click)="onEditClick()">Edit Task</button>
+  </div>
+
+  <div class="action-buttons" *ngIf="!canEdit && mode === 'view'">
+    <p class="read-only-note">View only - Contact administrator to edit this task.</p>
+  </div>
+</div>

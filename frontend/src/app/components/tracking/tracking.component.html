@@ -1,0 +1,106 @@
+<div class="tracking-page container-fluid py-4">
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="card control-card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-geo-fill text-info"></i>
+            Live Tracking Controls
+          </h5>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-person-bounding-box me-1 text-primary"></i>Employee
+            </label>
+            <select class="form-select" [value]="selectedEmployeeId || ''" (change)="onEmployeeChange($event)">
+              <option value="">Select employee</option>
+              <option *ngFor="let employee of employees" [value]="employee.employeeId">
+                {{ employee.name }} ({{ employee.employeeCode || 'ID ' + employee.employeeId }})
+              </option>
+            </select>
+          </div>
+
+          <div class="status-banner mb-4" [class.active]="isConnecting">
+            <div class="status-indicator" [class.live]="!isConnecting"></div>
+            <div>
+              <p class="mb-0 fw-semibold">{{ statusMessage }}</p>
+              <small class="text-muted" *ngIf="latestLocation">
+                Last update: {{ latestLocation.timestamp | date:'shortTime' }}
+              </small>
+            </div>
+          </div>
+
+          <div class="simulation-form">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h6 class="mb-0 fw-semibold text-uppercase text-muted">Simulate Trip</h6>
+              <span class="badge bg-info bg-opacity-25 text-info">
+                Generates 50+ waypoints
+              </span>
+            </div>
+
+            <form [formGroup]="simulationForm" (ngSubmit)="startSimulation()">
+              <div class="row g-2">
+                <div class="col-6">
+                  <label class="form-label small text-muted">Start Latitude</label>
+                  <input type="number" class="form-control form-control-sm" formControlName="startLatitude" step="0.0001">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted">Start Longitude</label>
+                  <input type="number" class="form-control form-control-sm" formControlName="startLongitude" step="0.0001">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted">End Latitude</label>
+                  <input type="number" class="form-control form-control-sm" formControlName="endLatitude" step="0.0001">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted">End Longitude</label>
+                  <input type="number" class="form-control form-control-sm" formControlName="endLongitude" step="0.0001">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted">Waypoints</label>
+                  <input type="number" class="form-control form-control-sm" formControlName="waypoints" min="50" max="500">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted">Interval (seconds)</label>
+                  <input type="number" class="form-control form-control-sm" formControlName="intervalSeconds" min="1" max="2">
+                </div>
+              </div>
+
+              <button class="btn btn-primary w-100 mt-3" type="submit" [disabled]="isSimulating || !selectedEmployeeId">
+                <span *ngIf="isSimulating" class="spinner-border spinner-border-sm me-2"></span>
+                Simulate Trip
+              </button>
+            </form>
+          </div>
+
+          <div class="telemetry-card mt-4" *ngIf="latestLocation">
+            <div class="d-flex align-items-center gap-3">
+              <div class="telemetry-icon">
+                <i class="bi bi-compass"></i>
+              </div>
+              <div>
+                <div class="fw-semibold text-uppercase text-muted small mb-1">Current Coordinates</div>
+                <div class="fw-bold fs-6">
+                  {{ latestLocation.latitude | number:'1.4-4' }},
+                  {{ latestLocation.longitude | number:'1.4-4' }}
+                </div>
+                <small class="text-muted">
+                  {{ latestLocation.timestamp | date:'medium' }}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card map-card shadow-sm h-100">
+        <div class="card-body p-0">
+          <div id="trackingMap" class="tracking-map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

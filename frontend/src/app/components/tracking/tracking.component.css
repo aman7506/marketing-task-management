@@ -1,0 +1,126 @@
+.tracking-page {
+  min-height: calc(100vh - 120px);
+}
+
+.map-card {
+  border-radius: 20px;
+  overflow: hidden;
+  border: none;
+}
+
+.tracking-map {
+  width: 100%;
+  height: 75vh;
+  min-height: 500px;
+}
+
+.control-card {
+  border-radius: 20px;
+  border: none;
+}
+
+.status-banner {
+  display: flex;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: rgba(13, 110, 253, 0.08);
+  border: 1px solid rgba(13, 110, 253, 0.15);
+  align-items: center;
+}
+
+.status-banner.active {
+  background: rgba(255, 193, 7, 0.15);
+  border-color: rgba(255, 193, 7, 0.35);
+}
+
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #ffc107;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.7);
+}
+
+.status-indicator.live {
+  background: #28a745;
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.7);
+}
+
+.simulation-form {
+  padding: 1rem;
+  border-radius: 16px;
+  background: #f8f9fa;
+  border: 1px solid #eef0f2;
+}
+
+.telemetry-card {
+  padding: 1rem;
+  border-radius: 16px;
+  background: #0dcaf0;
+  background: linear-gradient(135deg, #0dcaf0 0%, #0d6efd 100%);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(13, 110, 253, 0.25);
+}
+
+.telemetry-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+                                                                /* Ensure Leaflet markers are always visible */
+.leaflet-marker-icon {
+  z-index: 1000 !important;
+  position: relative;
+}
+
+.leaflet-marker-shadow {
+  z-index: 999 !important;
+}
+
+/* Custom marker styles (if using divIcon) */
+.tracking-employee-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000 !important;
+}
+
+.tracking-employee-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ff6b6b;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 12px rgba(255, 107, 107, 0.8);
+  animation: pulse 1.5s infinite;
+  display: inline-flex;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 12px rgba(255, 107, 107, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+  }
+}
+
+@media (max-width: 991.98px) {
+  .tracking-map {
+    height: 50vh;
+  }
+}
+

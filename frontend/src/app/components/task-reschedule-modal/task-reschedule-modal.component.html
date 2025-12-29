@@ -1,0 +1,111 @@
+<div class="modal-overlay" *ngIf="show" (click)="onClose()"></div>
+
+<div class="reschedule-modal" *ngIf="show" [class.show]="show">
+  <div class="modal-content-custom" (click)="$event.stopPropagation()">
+    <div class="modal-header-custom">
+      <h2 class="modal-title-custom">
+        <i class="bi bi-calendar-event"></i>
+        Reschedule Task
+      </h2>
+      <button type="button" class="close-btn" (click)="onClose()" aria-label="Close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="modal-body-custom" *ngIf="task">
+      <div class="task-info-card">
+        <h3 class="info-title">Current Task Details</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Description:</label>
+            <p>{{ task.description }}</p>
+          </div>
+          <div class="info-item">
+            <label>Priority:</label>
+            <span class="priority-badge" [class]="'priority-' + task.priority.toLowerCase()">{{ task.priority }}</span>
+          </div>
+          <div class="info-item">
+            <label>Current Task Date:</label>
+            <p>{{ formatDate(task.taskDate) }}</p>
+          </div>
+          <div class="info-item">
+            <label>Current Deadline:</label>
+            <p>{{ formatDate(task.deadline) }}</p>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="rescheduleForm" (ngSubmit)="onSubmit()" class="reschedule-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="newTaskDate" class="form-label">
+              <i class="bi bi-calendar-date"></i>
+              New Task Date <span class="required">*</span>
+            </label>
+            <input type="date" id="newTaskDate" class="form-input" formControlName="newTaskDate" [min]="minDate"
+              [class.error]="newTaskDate?.invalid && newTaskDate?.touched">
+            <div class="error-message" *ngIf="newTaskDate?.invalid && newTaskDate?.touched">
+              <span *ngIf="newTaskDate?.errors?.['required']">New task date is required</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="newDeadline" class="form-label">
+              <i class="bi bi-calendar-check"></i>
+              New Deadline <span class="required">*</span>
+            </label>
+            <input type="date" id="newDeadline" class="form-input" formControlName="newDeadline" [min]="minDeadlineDate"
+              [class.error]="(newDeadline?.invalid && newDeadline?.touched) || !isDeadlineValid()">
+            <div class="error-message" *ngIf="newDeadline?.invalid && newDeadline?.touched">
+              <span *ngIf="newDeadline?.errors?.['required']">New deadline is required</span>
+            </div>
+            <div class="error-message" *ngIf="!isDeadlineValid() && newTaskDate?.value && newDeadline?.value">
+              Deadline must be after the task date
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="rescheduleReason" class="form-label">
+            <i class="bi bi-chat-text"></i>
+            Reason for Rescheduling <span class="required">*</span>
+          </label>
+          <textarea id="rescheduleReason" class="form-textarea" formControlName="rescheduleReason" rows="4"
+            placeholder="Please provide a detailed reason for rescheduling this task..." maxlength="500"
+            [class.error]="rescheduleReason?.invalid && rescheduleReason?.touched"></textarea>
+          <div class="char-counter" [class.warning]="getRemainingCharacters() < 50"
+            [class.danger]="getRemainingCharacters() < 10">
+            {{ getRemainingCharacters() }} characters remaining
+          </div>
+          <div class="error-message" *ngIf="rescheduleReason?.invalid && rescheduleReason?.touched">
+            <span *ngIf="rescheduleReason?.errors?.['required']">Reason for rescheduling is required</span>
+            <span *ngIf="rescheduleReason?.errors?.['maxlength']">Reason cannot exceed 500 characters</span>
+          </div>
+        </div>
+
+        <div class="summary-card" *ngIf="newTaskDate?.value && newDeadline?.value">
+          <i class="bi bi-info-circle"></i>
+          <p>
+            <strong>Summary:</strong> Task will be rescheduled from <strong>{{ formatDate(task.taskDate) }}</strong> to
+            <strong>{{ formatDate(newTaskDate?.value) }}</strong>,
+            with deadline moved from <strong>{{ formatDate(task.deadline) }}</strong> to <strong>{{
+              formatDate(newDeadline?.value) }}</strong>.
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer-custom">
+      <button type="button" class="btn btn-secondary" (click)="onClose()" [disabled]="isSubmitting">
+        <i class="bi bi-x-circle"></i>
+        Cancel
+      </button>
+      <button type="button" class="btn btn-primary" (click)="onSubmit()"
+        [disabled]="!rescheduleForm.valid || isSubmitting || !isDeadlineValid()">
+        <span *ngIf="isSubmitting" class="spinner"></span>
+        <i class="bi bi-calendar-event" *ngIf="!isSubmitting"></i>
+        {{ isSubmitting ? 'Rescheduling...' : 'Reschedule Task' }}
+      </button>
+    </div>
+  </div>
+</div>

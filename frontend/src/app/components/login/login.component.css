@@ -1,0 +1,385 @@
+/* Enhanced Login Component Styles with Bootstrap Integration */
+
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  pointer-events: none;
+}
+
+/* Left Side Branding */
+.login-branding {
+  background: linear-gradient(135deg, rgba(0, 128, 128, 0.9) 0%, rgba(0, 102, 102, 0.95) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-branding::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+.branding-content {
+  position: relative;
+  z-index: 2;
+  padding: 3rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.logo-img {
+  max-height: 80px;
+  width: auto;
+  filter: brightness(1.2) contrast(1.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.logo-img-mobile {
+  max-height: 60px;
+  width: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.feature-list {
+  margin-top: 2rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  opacity: 0;
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.feature-item:nth-child(1) { animation-delay: 0.2s; }
+.feature-item:nth-child(2) { animation-delay: 0.4s; }
+.feature-item:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Right Side Form */
+.login-form-container {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+  padding: 3rem !important;
+}
+
+/* Form Enhancements */
+.form-label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.input-group-text {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 1px solid #dee2e6;
+  color: #6c757d;
+  border-radius: 12px 0 0 12px;
+  transition: all 0.3s ease;
+}
+
+.form-control {
+  border: 1px solid #dee2e6;
+  border-radius: 0 12px 12px 0;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus {
+  border-color: #008080;
+  box-shadow: 0 0 0 0.2rem rgba(0, 128, 128, 0.25);
+  background: rgba(255, 255, 255, 1);
+}
+
+.input-group:focus-within .input-group-text {
+  border-color: #008080;
+  background: linear-gradient(135deg, #008080 0%, #20b2aa 100%);
+  color: white;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #008080 0%, #20b2aa 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 0.875rem 2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #006666 0%, #1a9999 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 128, 128, 0.3);
+}
+
+.btn-primary:disabled {
+  background: #6c757d;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Alert Enhancements */
+.alert-danger {
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+/* Demo Credentials Accordion */
+.accordion-item {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.accordion-button {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  color: #495057;
+  padding: 1rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+  background: linear-gradient(135deg, #008080 0%, #20b2aa 100%);
+  color: white;
+  box-shadow: none;
+}
+
+.accordion-button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 128, 128, 0.25);
+}
+
+.accordion-body {
+  background: rgba(248, 249, 250, 0.5);
+  border-radius: 0 0 12px 12px;
+  padding: 1.5rem;
+}
+
+.credential-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.credential-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading Spinner */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 991.98px) {
+  .login-form-container {
+    padding: 1rem;
+  }
+  
+  .card-body {
+    padding: 2rem !important;
+  }
+  
+  .branding-content {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .card-body {
+    padding: 1.5rem !important;
+  }
+  
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Animation for form appearance */
+.card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus states for accessibility */
+.form-control:focus,
+.btn:focus,
+.accordion-button:focus {
+  outline: none;
+}
+
+/* Custom scrollbar for accordion */
+.accordion-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.accordion-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.accordion-body::-webkit-scrollbar-thumb {
+  background: #008080;
+  border-radius: 3px;
+}
+
+.accordion-body::-webkit-scrollbar-thumb:hover {
+  background: #006666;
+}
+
+/* Hover effects for interactive elements */
+.credential-card p {
+  margin-bottom: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+.credential-card:hover p {
+  color: #495057;
+}
+
+/* Enhanced typography */
+.display-4 {
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.lead {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Success state for form validation */
+.form-control.is-valid {
+  border-color: #28a745;
+  background-image: none;
+}
+
+.form-control.is-valid:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+/* Removed :has() selector for better browser compatibility */
+.input-group .form-control.is-valid + .input-group-text,
+.input-group .form-control.is-valid ~ .input-group-text {
+  border-color: #28a745;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+/* Error state enhancements */
+.form-control.is-invalid {
+  background-image: none;
+}
+
+/* Removed :has() selector for better browser compatibility */
+.input-group .form-control.is-invalid + .input-group-text,
+.input-group .form-control.is-invalid ~ .input-group-text {
+  border-color: #dc3545;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+}

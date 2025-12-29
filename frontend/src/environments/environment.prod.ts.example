@@ -1,0 +1,14 @@
+// PRODUCTION ENVIRONMENT CONFIGURATION TEMPLATE
+// Copy this file and update URLs with your actual deployed backend URL
+
+const serverBaseUrl = 'https://your-backend-api.onrender.com'; // UPDATE THIS!
+
+export const environment = {
+  production: true,
+  backendBaseUrl: serverBaseUrl,
+  apiUrl: `${serverBaseUrl}/api`,
+  apiBaseUrl: `${serverBaseUrl}/api`,
+  signalRHubUrl: `${serverBaseUrl}/notificationHub`,
+  trackingHubUrl: `${serverBaseUrl}/trackingHub`,
+  lanTrackingHubUrl: `${serverBaseUrl}/trackingHub`
+};

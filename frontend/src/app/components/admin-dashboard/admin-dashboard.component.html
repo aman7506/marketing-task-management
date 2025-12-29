@@ -1,0 +1,598 @@
+<div class="admin-dashboard">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header py-5 px-3"
+    style="background: linear-gradient(90deg, #6366f1 0%, #0ea5e9 100%); border-radius: 1.5rem; box-shadow: 0 8px 32px rgba(0,0,0,0.11); margin-bottom:2.5rem;">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap">
+      <div class="">
+        <h1 class="display-4 fw-bold text-white mb-2"
+          style="letter-spacing:-2px; text-shadow: 0 1px 18px rgba(0,0,0,0.12)">Admin Dashboard</h1>
+        <p class="lead text-white opacity-75 mb-0">Welcome back, <span class="fw-bold text-white">{{ currentUser?.email
+            }}</span>!<br>Manage and monitor all marketing tasks efficiently.</p>
+      </div>
+      <div class="d-flex flex-row gap-3">
+        <button class="btn btn-primary btn-lg px-4 rounded-pill d-flex align-items-center shadow premium-btn"
+          (click)="openCreateTaskModal()"><i class="bi bi-plus-circle me-2"></i> Create Task</button>
+        <a routerLink="/admin/marketing-form"
+          class="btn btn-info btn-lg px-4 rounded-pill d-flex align-items-center shadow premium-btn"><i
+            class="bi bi-megaphone me-2"></i> Marketing Form</a>
+        <a routerLink="/admin/tracking"
+          class="btn btn-warning btn-lg px-4 rounded-pill d-flex align-items-center shadow text-white premium-btn"
+          style="background: linear-gradient(90deg,#facc15,#fde68a); color:#2d3748;"><i
+            class="bi bi-geo-alt-fill me-2"></i> Live Tracking</a>
+        <button class="btn btn-dark btn-lg px-4 rounded-pill d-flex align-items-center shadow premium-btn"
+          (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i> Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Statistics -->
+  <div class="container-fluid py-4">
+    <div class="stat-tiles-row d-flex flex-row flex-nowrap gap-4 justify-content-start align-items-end overflow-auto">
+      <div
+        class="stat-card stat-gradient-{{stat.color}} shadow rounded-4 text-white d-flex flex-column justify-content-center align-items-center px-4 py-3"
+        style="min-width:148px; min-height:120px; border:none; cursor:pointer; transition: transform 0.2s, box-shadow 0.2s;"
+        [style.opacity]="stat.filterValue && selectedStatus === stat.filterValue ? '1' : '0.85'"
+        [style.transform]="stat.filterValue && selectedStatus === stat.filterValue ? 'scale(1.05)' : 'scale(1)'"
+        *ngFor="let stat of statTiles" (click)="onStatTileClick(stat)"
+        (mouseenter)="onStatTileHover($event, stat, true)" (mouseleave)="onStatTileHover($event, stat, false)">
+        <div class="stat-number mb-1 fs-2 fw-bold" style="text-shadow:0 2px 10px rgba(0,0,0,0.11);">{{ stat.value }}
+        </div>
+        <div class="fs-6 fw-semibold text-uppercase opacity-90">{{ stat.label }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="container-fluid pb-3">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-0">
+        <ul class="nav nav-tabs nav-fill" id="dashboardTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" [class.active]="activeTab === 'tasks'" (click)="switchTab('tasks')" type="button"
+              role="tab">
+              <i class="bi bi-list-task me-2"></i>
+              Tasks Management
+              <span class="badge bg-primary ms-2">{{ tasks.length }}</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" [class.active]="activeTab === 'campaigns'" (click)="switchTab('campaigns')"
+              type="button" role="tab">
+              <i class="bi bi-megaphone me-2"></i>
+              Marketing Campaigns
+              <span class="badge bg-info ms-2">{{ marketingCampaigns.length }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Controls -->
+  <div class="container-fluid pb-4 filter-controls">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4">
+            <label for="statusFilter" class="form-label fw-semibold">
+              <i class="bi bi-funnel me-1"></i>Filter by Status
+            </label>
+            <select id="statusFilter" class="form-select" [(ngModel)]="selectedStatus"
+              (change)="onStatusFilterChange()">
+              <option *ngFor="let option of statusOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="employeeFilter" class="form-label fw-semibold">
+              <i class="bi bi-people me-1"></i>Filter by Employee
+            </label>
+            <select id="employeeFilter" class="form-select" [(ngModel)]="selectedEmployee"
+              (change)="onEmployeeFilterChange()">
+              <option value="all">All Employees</option>
+              <option *ngFor="let employee of (employees || [])" [value]="employee.employeeId">
+                {{ employee.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-outline-primary w-100" (click)="loadTasks()" [disabled]="isLoading">
+              <span *ngIf="!isLoading">
+                <i class="bi bi-arrow-clockwise me-2"></i>Refresh Data
+              </span>
+              <span *ngIf="isLoading">
+                <span class="spinner-border spinner-border-sm me-2"></span>Loading...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content" id="dashboardTabContent">
+    <!-- Tasks Tab -->
+    <div class="tab-pane fade" [class.show]="activeTab === 'tasks'" [class.active]="activeTab === 'tasks'">
+      <!-- Loading State -->
+      <div class="container-fluid" *ngIf="isLoading">
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+          <h4 class="text-muted">Loading tasks...</h4>
+          <p class="text-muted">Please wait while we fetch the latest data</p>
+        </div>
+      </div>
+
+      <!-- Vertical Task Cards Premium Vertical Layout -->
+      <div class="container-fluid pt-3">
+        <div class="row g-0 task-horizontal-row flex-nowrap overflow-auto" style="flex-wrap:nowrap;">
+          <div class="col-auto" *ngFor="let task of filteredTasks">
+            <div class="card shadow rounded-4 p-4 d-flex flex-column h-100 task-horiz-card mx-3 my-2"
+              style="min-width:420px;max-width:525px;">
+              <div class="d-flex align-items-start gap-2 mb-1 flex-wrap">
+                <span class="fw-bold fs-5 text-dark">{{ task.description }}</span>
+                <span class="badge bg-warning text-dark premium-pill">{{ task.priority }}</span>
+                <span class="badge bg-info text-white premium-pill">{{ task.status }}</span>
+              </div>
+              <div class="mb-2 small text-muted"><i class="bi bi-hash"></i> #{{ task.taskId }} • {{
+                formatDate(task.taskDate) }}</div>
+              <div class="row g-1 mb-2">
+                <div class="col-5"><b>Employee:</b></div>
+                <div class="col-7">{{ task.employeeName }}</div>
+                <div class="col-5"><b>Designation:</b></div>
+                <div class="col-7">{{ task.employeeDesignation }}</div>
+                <div class="col-5"><b>Contact:</b></div>
+                <div class="col-7">{{ task.employeeContact }}</div>
+                <div class="col-5"><span class="badge bg-secondary premium-pill mb-1">Project: {{ task.projectCode
+                    }}</span></div>
+                <div class="col-7"><span class="badge bg-light text-dark premium-pill mb-1">Loc: {{ task.locationName
+                    }}</span></div>
+                <div class="col-5"><b>Custom Location:</b></div>
+                <div class="col-7">{{ task.customLocation }}</div>
+                <div class="col-5"><b>Type:</b></div>
+                <div class="col-7">{{ task.taskType }}</div>
+                <div class="col-5"><b>Category:</b></div>
+                <div class="col-7">{{ task.taskCategory }}</div>
+                <div class="col-5"><b>Client:</b></div>
+                <div class="col-7">{{ task.clientName }}</div>
+                <div class="col-12"><span
+                    [ngClass]="{'text-danger fw-bold': isOverdue(task.deadline) && task.status !== 'Completed'}"><i
+                      class="bi bi-clock me-1"></i>Deadline: {{ formatDate(task.deadline) }}</span><span
+                    *ngIf="isOverdue(task.deadline) && task.status !== 'Completed'"
+                    class="badge bg-danger ms-2 premium-pill">OVERDUE</span></div>
+                <div class="col-12 mb-1 small"><b>Estimated:</b> {{ task.estimatedHours }}h <b>Actual:</b> {{
+                  task.actualHours }}h</div>
+                <div class="col-12 mb-1 small"><b>Assigned By:</b> {{ task.assignedByUserName }}</div>
+              </div>
+              <div class="small mb-2"><b>Updated:</b> {{ formatDate(task.updatedAt) }}</div>
+              <div class="mt-auto d-flex gap-2 justify-content-end pt-2">
+                <button class="btn btn-outline-success rounded-pill px-3 py-2 d-flex align-items-center"
+                  (click)="openAdminTaskModal(task, 'view')" title="View"><i class="bi bi-eye me-1"></i>View</button>
+                <button class="btn btn-primary rounded-pill px-3 py-2 d-flex align-items-center"
+                  (click)="openEditTaskModal(task)" title="Edit"><i class="bi bi-pencil-square me-1"></i>Edit</button>
+                <button class="btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center"
+                  (click)="deleteTask(task)" title="Delete"><i class="bi bi-trash me-1"></i>Delete</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="filteredTasks.length === 0 && !isLoading" class="text-center py-5 w-100">
+            <div class="text-muted mb-3"><i class="bi bi-clipboard-x" style="font-size: 2.3rem;"></i></div>
+            <h5>No tasks found</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task Details Modal -->
+      <div class="modal fade" [class.show]="showTaskDetails" [style.display]="showTaskDetails ? 'block' : 'none'"
+        tabindex="-1" *ngIf="showTaskDetails" (click)="closeTaskDetails()">
+        <div class="modal-dialog modal-lg modal-dialog-centered" (click)="$event.stopPropagation()">
+          <div class="modal-content" *ngIf="selectedTask">
+            <div class="modal-header bg-primary text-white">
+              <h4 class="modal-title">
+                <i class="bi bi-info-circle me-2"></i>Task Details
+              </h4>
+              <button type="button" class="btn-close btn-close-white" (click)="closeTaskDetails()"></button>
+            </div>
+
+            <div class="modal-body">
+              <!-- Task Information -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-primary mb-3">
+                        <i class="bi bi-clipboard-data me-2"></i>Task Information
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Task ID:</strong>
+                          <span class="fs-6">#{{ selectedTask.taskId }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Priority:</strong>
+                          <span class="badge" [ngClass]="getPriorityClass(selectedTask.priority)">
+                            {{ selectedTask.priority }}
+                          </span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Status:</strong>
+                          <span class="badge" [ngClass]="getStatusClass(selectedTask.status)">
+                            {{ selectedTask.status }}
+                          </span>
+                        </div>
+                        <div class="col-12">
+                          <strong class="text-muted d-block">Description:</strong>
+                          <p class="mb-0">{{ selectedTask.description }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Employee Information -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-success mb-3">
+                        <i class="bi bi-person-badge me-2"></i>Employee Information
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Name:</strong>
+                          <span class="fs-6">{{ selectedTask.employeeName || selectedTask?.Employee?.Name }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Designation:</strong>
+                          <span class="fs-6">{{ selectedTask.employeeDesignation || selectedTask?.Employee?.Designation
+                            }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Contact:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-telephone me-1"></i>{{ selectedTask.employeeContact ||
+                            selectedTask?.Employee?.Contact }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Location & Timing -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-info mb-3">
+                        <i class="bi bi-geo-alt me-2"></i>Location & Timing
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Location:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-pin-map me-1"></i>{{ selectedTask.locationName }}
+                            <span *ngIf="selectedTask.customLocation"> ({{ selectedTask.customLocation }})</span>
+                          </span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Task Date:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-calendar3 me-1"></i>{{ formatDate(selectedTask.taskDate) }}
+                          </span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Deadline:</strong>
+                          <span class="fs-6"
+                            [ngClass]="{'text-danger': isOverdue(selectedTask.deadline) && selectedTask.status !== 'Completed'}">
+                            <i class="bi bi-clock me-1"
+                              [ngClass]="{'text-danger': isOverdue(selectedTask.deadline) && selectedTask.status !== 'Completed'}"></i>
+                            {{ formatDate(selectedTask.deadline) }}
+                            <span *ngIf="isOverdue(selectedTask.deadline) && selectedTask.status !== 'Completed'"
+                              class="badge bg-danger ms-2">OVERDUE</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Assignment Details -->
+              <div class="row">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-warning mb-3">
+                        <i class="bi bi-person-check me-2"></i>Assignment Details
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Assigned By:</strong>
+                          <span class="fs-6">{{ selectedTask.assignedByUserName }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Created:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-calendar-plus me-1"></i>{{ formatDate(selectedTask.createdAt) }}
+                          </span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Last Updated:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-arrow-clockwise me-1"></i>{{ formatDate(selectedTask.updatedAt) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeTaskDetails()">
+                <i class="bi bi-x-circle me-2"></i>Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketing Campaigns Tab -->
+    <div class="tab-pane fade" [class.show]="activeTab === 'campaigns'" [class.active]="activeTab === 'campaigns'">
+      <!-- Loading State -->
+      <div class="container-fluid" *ngIf="isLoadingCampaigns">
+        <div class="text-center py-5">
+          <div class="spinner-border text-info mb-3" style="width: 3rem; height: 3rem;"></div>
+          <h4 class="text-muted">Loading marketing campaigns...</h4>
+          <p class="text-muted">Please wait while we fetch the latest data</p>
+        </div>
+      </div>
+
+      <!-- CAMPAIGN/DATA CARDS Premium -->
+      <div class="container-fluid pt-3">
+        <div class="campaign-vertical-list row g-4 justify-content-center">
+          <div class="col-12 campaign-card-filled" *ngFor="let campaign of filteredCampaigns">
+            <div class="campaign-beautiful-card-v2 p-0 m-0">
+              <!-- Modern Gradient Strip -->
+              <div class="campaign-gradient-top-bar"></div>
+              <div class="p-4 p-md-5">
+                <div class="d-flex flex-wrap align-items-center mb-3 gap-2">
+                  <h5 class="fw-bold text-dark mb-0 flex-grow-1 fs-3">{{ campaign.clientName || 'N/A' }}</h5>
+                  <span class="badge bg-secondary premium-pill fs-6">Project: {{ campaign.projectCode }}</span>
+                </div>
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                  <span class="badge bg-info premium-pill fs-6">Consultant: {{ campaign.consultantName }}</span>
+                  <span class="badge bg-light text-dark premium-pill fs-6">{{ campaign.locality }}, {{ campaign.pincode
+                    }}</span>
+                </div>
+                <div class="row g-3 align-items-center mb-3">
+                  <div class="col-md-6">
+                    <div class="mb-1"><b>Campaign Manager:</b> {{ campaign.campaignManager }}</div>
+                    <div class="mb-1"><b>Est. Hours:</b> {{ campaign.estimatedHours }}h</div>
+                    <div class="mb-1"><b class="text-muted small">Marketing Campaign</b></div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-1"><b>Dates:</b> {{ formatDate(campaign.taskDate) }}<span *ngIf="campaign.deadline">
+                        - {{ formatDate(campaign.deadline) }}</span></div>
+                    <div class="mb-1"><b>Reach:</b> {{ campaign.expectedReach | number }}</div>
+                  </div>
+                </div>
+                <div class="text-muted small mb-1"><i class="bi bi-card-text"></i> {{ campaign.taskDescription || 'No
+                  description provided.' }}</div>
+                <!-- Actions -->
+                <div class="d-flex gap-4 pt-3 justify-content-end align-items-center card-action-row">
+                  <button class="btn btn-outline-success rounded-pill px-3 py-2 d-flex align-items-center"
+                    (click)="viewCampaign(campaign)" title="View"><i class="bi bi-eye me-1"></i>View</button>
+                  <button class="btn btn-primary rounded-pill px-3 py-2 d-flex align-items-center"
+                    (click)="editCampaign(campaign)" title="Edit"><i class="bi bi-pencil me-1"></i>Edit</button>
+                  <button class="btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center"
+                    (click)="deleteCampaign(campaign)" title="Delete"><i class="bi bi-trash me-1"></i>Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="filteredCampaigns.length === 0 && !isLoadingCampaigns" class="text-center py-5 w-100 text-muted">
+            <i class="bi bi-megaphone" style="font-size: 2.3rem;"></i>
+            <h5>No marketing campaigns found</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campaign Details Modal -->
+      <div class="modal fade" [class.show]="showCampaignDetails"
+        [style.display]="showCampaignDetails ? 'block' : 'none'" tabindex="-1" *ngIf="showCampaignDetails"
+        (click)="closeCampaignDetails()">
+        <div class="modal-dialog modal-xl modal-dialog-centered" (click)="$event.stopPropagation()">
+          <div class="modal-content" *ngIf="selectedCampaign">
+            <div class="modal-header bg-info text-white">
+              <h4 class="modal-title">
+                <i class="bi bi-megaphone me-2"></i>Campaign Details
+              </h4>
+              <button type="button" class="btn-close btn-close-white" (click)="closeCampaignDetails()"></button>
+            </div>
+
+            <div class="modal-body">
+              <!-- Campaign Information -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-info mb-3">
+                        <i class="bi bi-bullseye me-2"></i>Campaign Information
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Campaign ID:</strong>
+                          <span class="fs-6">#{{ selectedCampaign.campaignId }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Campaign Manager:</strong>
+                          <span class="fs-6">{{ selectedCampaign.campaignManager }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Priority:</strong>
+                          <span class="badge" [ngClass]="getPriorityClass(selectedCampaign.priority)">
+                            {{ selectedCampaign.priority }}
+                          </span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Status:</strong>
+                          <span class="badge" [ngClass]="getStatusClass(selectedCampaign.status || 'Active')">
+                            {{ selectedCampaign.status || 'Active' }}
+                          </span>
+                        </div>
+                        <div class="col-12">
+                          <strong class="text-muted d-block">Description:</strong>
+                          <p class="mb-0">{{ selectedCampaign.taskDescription }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Client & Project Information -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-primary mb-3">
+                        <i class="bi bi-building me-2"></i>Client & Project Information
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Client:</strong>
+                          <span class="fs-6">{{ selectedCampaign.clientName }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Project Code:</strong>
+                          <span class="fs-6">{{ selectedCampaign.projectCode }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Consultant:</strong>
+                          <span class="fs-6">{{ selectedCampaign.consultantName }}</span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Campaign Code:</strong>
+                          <span class="fs-6">{{ selectedCampaign.campaignCode }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Location & Timing -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-success mb-3">
+                        <i class="bi bi-geo-alt me-2"></i>Location & Timing
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Location:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-pin-map me-1"></i>{{ selectedCampaign.locality }}, {{
+                            selectedCampaign.pincode
+                            }}
+                          </span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Task Date:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-calendar3 me-1"></i>{{ formatDate(selectedCampaign.taskDate) }}
+                          </span>
+                        </div>
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Deadline:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-clock me-1"></i>{{ formatDate(selectedCampaign.deadline) }}
+                          </span>
+                        </div>
+                        <div class="col-md-6" *ngIf="selectedCampaign.estimatedHours">
+                          <strong class="text-muted d-block">Estimated Hours:</strong>
+                          <span class="fs-6">{{ selectedCampaign.estimatedHours }}h</span>
+                        </div>
+                        <div class="col-md-6" *ngIf="selectedCampaign.expectedReach">
+                          <strong class="text-muted d-block">Expected Reach:</strong>
+                          <span class="fs-6">{{ selectedCampaign.expectedReach | number }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Additional Details -->
+              <div class="row mb-4" *ngIf="selectedCampaign.additionalNotes">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-warning mb-3">
+                        <i class="bi bi-file-earmark-text me-2"></i>Additional Notes
+                      </h5>
+                      <p class="fs-6 mb-0">{{ selectedCampaign.additionalNotes }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Timestamps -->
+              <div class="row">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title text-secondary mb-3">
+                        <i class="bi bi-clock-history me-2"></i>Timestamps
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <strong class="text-muted d-block">Created:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-calendar-plus me-1"></i>{{ formatDateTime(selectedCampaign.createdAt || '')
+                            }}
+                          </span>
+                        </div>
+                        <div class="col-md-6" *ngIf="selectedCampaign.updatedAt">
+                          <strong class="text-muted d-block">Last Updated:</strong>
+                          <span class="fs-6">
+                            <i class="bi bi-arrow-clockwise me-1"></i>{{ formatDateTime(selectedCampaign.updatedAt) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-info" (click)="printCampaignForm()">
+                <i class="bi bi-printer me-2"></i>Print Form
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="closeCampaignDetails()">
+                <i class="bi bi-x-circle me-2"></i>Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop fade" [class.show]="showTaskDetails" *ngIf="showTaskDetails"></div>
+  <div class="modal-backdrop fade" [class.show]="showCampaignDetails" *ngIf="showCampaignDetails"></div>
+
+  <!-- Admin Task Modal -->
+  <app-admin-task-modal [show]="showAdminTaskModal" [mode]="adminTaskModalMode" [task]="selectedTask"
+    (close)="closeAdminTaskModal()" (taskSaved)="onTaskSaved($event)" (taskDeleted)="onTaskDeleted($event)"
+    (taskCreated)="onTaskCreated()">
+  </app-admin-task-modal>

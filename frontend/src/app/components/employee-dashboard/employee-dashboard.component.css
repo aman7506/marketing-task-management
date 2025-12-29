@@ -1,0 +1,490 @@
+/* Premium/Classy Employee Dashboard CSS - Matching Admin Dashboard */
+
+/* ============================================
+   EMPLOYEE DASHBOARD DESIGN (Admin Style)
+   ============================================ */
+
+.employee-dashboard {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    background: #f4f6f9;
+}
+
+/* ============================================
+   DASHBOARD HEADER (Blue Gradient like Admin)
+   ============================================ */
+.dashboard-header {
+    background: linear-gradient(to right, #5B73E8, #56C1E0) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 20px rgba(91, 115, 232, 0.3);
+    margin-bottom: 2rem !important;
+    padding: 2rem !important;
+}
+
+.dashboard-header h1 {
+    color: white !important;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+}
+
+.dashboard-header p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.1rem;
+}
+
+/* Header Logout Button */
+.dashboard-header .btn-dark {
+    background: #2C3E50;
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-header .btn-dark:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================
+   STAT TILES (Colorful Boxes like Admin)
+   ============================================ */
+.stat-tiles-row {
+    margin-bottom: 2rem;
+    padding: 0 15px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* No vertical scroll */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.stat-tiles-row::-webkit-scrollbar {
+    display: none;
+}
+
+.stat-card {
+    border-radius: 20px !important;
+    padding: 1.5rem !important;
+    min-width: 160px !important;
+    min-height: 130px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer;
+    border: none !important;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25) !important;
+}
+
+.stat-number {
+    font-size: 3rem !important;
+    font-weight: 800 !important;
+    color: white !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Stat Tile Colors (Exact Same as Admin) */
+.stat-gradient-blue {
+    background: linear-gradient(135deg, #FFB347, #FF8C00) !important;
+    /* Golden/Amber gradient for Total Tasks */
+}
+
+.stat-gradient-purple {
+    background: linear-gradient(135deg, #C06FC4, #B65BB9) !important;
+}
+
+.stat-gradient-teal {
+    background: linear-gradient(135deg, #3CCED8, #2DB9C7) !important;
+}
+
+.stat-gradient-yellow {
+    background: linear-gradient(135deg, #FFB347, #FFA033) !important;
+}
+
+.stat-gradient-red {
+    background: linear-gradient(135deg, #FF6B81, #EE5A6F) !important;
+}
+
+.stat-gradient-orange {
+    background: linear-gradient(135deg, #FF9966, #FF7F50) !important;
+}
+
+.stat-gradient-green {
+    background: linear-gradient(135deg, #48C774, #3BB765) !important;
+}
+
+/* ============================================
+   FILTER CONTROLS (Clean White like Admin)
+   ============================================ */
+.filter-controls .card {
+    border-radius: 15px !important;
+    border: none !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+    background: white !important;
+}
+
+.filter-controls .card-body {
+    padding: 1.5rem !important;
+}
+
+.filter-controls .form-label {
+    color: #555 !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+}
+
+.filter-controls .form-select {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 10px !important;
+    padding: 0.75rem !important;
+    font-weight: 500;
+    transition: all 0.3s;
+    background: white !important;
+}
+
+.filter-controls .form-select:focus {
+    border-color: #5B73E8 !important;
+    box-shadow: 0 0 0 0.2rem rgba(91, 115, 232, 0.15) !important;
+}
+
+.filter-controls .btn {
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    transition: all 0.3s;
+}
+
+.filter-controls .btn-primary {
+    background: linear-gradient(135deg, #5B73E8, #4A60D3) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.filter-controls .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(91, 115, 232, 0.3) !important;
+}
+
+/* ============================================
+   TASK CARDS (Clean Professional Layout)
+   ============================================ */
+.task-card {
+    border: none !important;
+    border-radius: 15px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.3s ease !important;
+    background: white !important;
+    overflow: hidden;
+}
+
+.task-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+.task-card .card-header {
+    background: rgba(91, 115, 232, 0.05) !important;
+    border-bottom: 2px solid rgba(91, 115, 232, 0.1) !important;
+    padding: 1.25rem !important;
+}
+
+.task-description-title {
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    color: #2c3e50 !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.75rem !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.task-meta {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.task-meta small {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.task-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.task-card .card-body {
+    padding: 1.25rem !important;
+}
+
+.task-location,
+.task-deadline {
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.task-location i,
+.task-deadline i {
+    color: #5B73E8;
+    margin-right: 0.5rem;
+}
+
+.task-card .card-footer {
+    background: rgba(91, 115, 232, 0.02) !important;
+    border-top: 2px solid rgba(91, 115, 232, 0.1) !important;
+    padding: 1rem !important;
+}
+
+/* ============================================
+   BADGES (Same as Admin)
+   ============================================ */
+.badge {
+    border-radius: 20px !important;
+    padding: 0.4em 0.8em !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #FF6B81, #EE5A6F) !important;
+    box-shadow: 0 2px 8px rgba(255, 107, 129, 0.3);
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, #FFC107, #FFB300) !important;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+    color: #000 !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, #56C1E0, #3CCED8) !important;
+    box-shadow: 0 2px 8px rgba(86, 193, 224, 0.3);
+    color: #000 !important;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #48C774, #3BB765) !important;
+    box-shadow: 0 2px 8px rgba(72, 199, 116, 0.3);
+}
+
+.badge.bg-secondary {
+    background: linear-gradient(135deg, #95A5A6, #7F8C8D) !important;
+    box-shadow: 0 2px 8px rgba(149, 165, 166, 0.3);
+}
+
+.badge.bg-primary {
+    background: linear-gradient(135deg, #5B73E8, #4A60D3) !important;
+    box-shadow: 0 2px 8px rgba(91, 115, 232, 0.3);
+}
+
+/* ============================================
+   BUTTONS (Same as Admin)
+   ============================================ */
+.btn {
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #48C774, #3BB765) !important;
+    border: none !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #5B73E8, #4A60D3) !important;
+    border: none !important;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #56C1E0, #3CCED8) !important;
+    border: none !important;
+    color: #000 !important;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #FFC107, #FFB300) !important;
+    border: none !important;
+    color: #000 !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #FF6B81, #EE5A6F) !important;
+    border: none !important;
+}
+
+.btn-outline-success {
+    border-color: #48C774 !important;
+    color: #48C774 !important;
+}
+
+.btn-outline-success:hover {
+    background: #48C774 !important;
+    color: white !important;
+}
+
+.btn-outline-primary {
+    border-color: #5B73E8 !important;
+    color: #5B73E8 !important;
+}
+
+.btn-outline-primary:hover {
+    background: #5B73E8 !important;
+    color: white !important;
+}
+
+.btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.premium-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.premium-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* ============================================
+   MODALS (Same as Admin)
+   ============================================ */
+.modal-content {
+    border-radius: 15px !important;
+    border: none !important;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05) !important;
+    padding: 1.5rem !important;
+}
+
+.modal-header .modal-title {
+    font-weight: 700 !important;
+}
+
+.modal-body {
+    padding: 2rem !important;
+}
+
+.modal-footer {
+    border-top: 2px solid rgba(0, 0, 0, 0.05) !important;
+    padding: 1.5rem !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.empty-state-icon {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+.spinner-border {
+    animation: spinner-border 0.75s linear infinite;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 768px) {
+    .stat-card {
+        min-width: 140px !important;
+        min-height: 110px !important;
+    }
+
+    .stat-number {
+        font-size: 2.5rem !important;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem !important;
+    }
+
+    .task-description-title {
+        font-size: 1rem !important;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.text-gradient {
+    background: linear-gradient(135deg, #5B73E8, #56C1E0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.shadow {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.rounded-pill {
+    border-radius: 50rem !important;
+}
+
+.rounded-4 {
+    border-radius: 1rem !important;
+}

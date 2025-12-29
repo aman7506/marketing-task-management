@@ -1,0 +1,153 @@
+<div class="login-container">
+  <div class="container-fluid">
+    <div class="row min-vh-100">
+      <!-- Left Side - Branding -->
+      <div class="col-lg-6 d-none d-lg-flex login-branding">
+        <div class="branding-content">
+          <div class="hospital-logo mb-4">
+            <img src="assets/hospital logo strip.jpg" alt="Sri Balaji Action Medical Institute & Action Cancer Hospital" class="logo-img img-fluid">
+          </div>
+          <h1 class="display-4 text-white mb-3">Marketing Task Management</h1>
+          <p class="lead text-white-50 mb-4">Sri Balaji Action Medical Institute & Action Cancer Hospital</p>
+          <div class="feature-list">
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <span class="text-white">Streamlined Task Assignment</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <span class="text-white">Real-time Progress Tracking</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <span class="text-white">Comprehensive Reporting</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side - Login Form -->
+      <div class="col-lg-6 d-flex align-items-center">
+        <div class="login-form-container w-100">
+          <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+              <!-- Mobile Logo -->
+              <div class="d-lg-none text-center mb-4">
+                <img src="assets/hospital logo strip.jpg" alt="Hospital Logo" class="logo-img-mobile img-fluid mb-3">
+                <h2 class="text-primary">Marketing Task Management</h2>
+              </div>
+
+              <div class="text-center mb-4">
+                <h3 class="card-title text-dark mb-2">Welcome Back!</h3>
+                <p class="text-muted">Please sign in to your account</p>
+              </div>
+
+              <!-- Login Form -->
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                  <label for="username" class="form-label">Email Address</label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="bi bi-envelope"></i>
+                    </span>
+                    <input 
+                      type="email" 
+                      id="username" 
+                      class="form-control"
+                      [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+                      formControlName="username" 
+                      placeholder="Enter your email address"
+                    >
+                  </div>
+                  <div class="invalid-feedback" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                    Please enter a valid email address
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label for="password" class="form-label">Password</label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="bi bi-lock"></i>
+                    </span>
+                    <input 
+                      type="password" 
+                      id="password" 
+                      class="form-control"
+                      [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                      formControlName="password" 
+                      placeholder="Enter your password"
+                    >
+                  </div>
+                  <div class="invalid-feedback" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                    Password is required
+                  </div>
+                </div>
+
+                <div class="d-grid mb-3">
+                  <button type="submit" class="btn btn-primary btn-lg" [disabled]="isLoading || loginForm.invalid">
+                    <span *ngIf="!isLoading">
+                      <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </span>
+                    <span *ngIf="isLoading">
+                      <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                      Signing in...
+                    </span>
+                  </button>
+                </div>
+
+                <div class="alert alert-danger" *ngIf="errorMessage" role="alert">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  {{ errorMessage }}
+                </div>
+              </form>
+
+              <!-- Demo Credentials -->
+              <div class="demo-credentials mt-4">
+                <div class="accordion" id="credentialsAccordion">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#demoCredentials">
+                        <i class="bi bi-key me-2"></i>Demo Credentials
+                      </button>
+                    </h2>
+                    <div id="demoCredentials" class="accordion-collapse collapse" data-bs-parent="#credentialsAccordion">
+                      <div class="accordion-body">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="credential-card">
+                              <h6 class="text-primary mb-2">
+                                <i class="bi bi-shield-check me-1"></i>Admin Access
+                              </h6>
+                              <p class="mb-1"><strong>Email:</strong> admin&#64;actionmedical.com</p>
+                              <p class="mb-0"><strong>Password:</strong> Admin123!</p>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="credential-card">
+                              <h6 class="text-success mb-2">
+                                <i class="bi bi-person-check me-1"></i>Employee Access
+                              </h6>
+                              <p class="mb-1"><strong>Email:</strong> arjun.mehta&#64;actionmedical.com</p>
+                              <p class="mb-0"><strong>Password:</strong> Employee123!</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="text-center mt-3">
+                          <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Role will be automatically determined based on your account
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

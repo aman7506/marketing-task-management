@@ -1,0 +1,113 @@
+# ============================================
+# ASP.NET CORE BACKEND .gitignore
+# ============================================
+
+# ===========================================
+# SENSITIVE FILES - CRITICAL!
+# ===========================================
+# Never commit these files with real credentials
+appsettings.json
+appsettings.Production.json
+appsettings.Staging.json
+web.config
+!web.config.example
+*.secret
+secrets.json
+
+# Keep example files for reference
+!appsettings.Development.json.example
+!appsettings.Production.json.example
+
+# ===========================================
+# BUILD RESULTS
+# ===========================================
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# ===========================================
+# VISUAL STUDIO
+# ===========================================
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# ===========================================
+# NUGET PACKAGES
+# ===========================================
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ===========================================
+# ENTITY FRAMEWORK
+# ===========================================
+# Migrations are usually kept, but you can ignore auto-generated ones
+# Migrations/
+
+# ===========================================
+# PUBLISH PROFILES
+# ===========================================
+PublishScripts/
+*.Publish.xml
+*.pubxml
+*.publishproj
+publish/
+
+# ===========================================
+# LOGS
+# ===========================================
+*.log
+logs/
+backend_log.txt
+
+# ===========================================
+# TEMP FILES
+# ===========================================
+*.tmp
+*.temp
+~$*
+
+# ===========================================
+# DATABASE FILES
+# ===========================================
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# ===========================================
+# DOCKER (if used)
+# ===========================================
+# Dockerfile
+# docker-compose.yml
+# .dockerignore
+
+# ===========================================
+# CUSTOM
+# ===========================================
+wwwroot/uploads/
+cleanup-script.ps1
+run.bat
+backend/

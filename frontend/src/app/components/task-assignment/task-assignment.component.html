@@ -1,0 +1,225 @@
+<div class="task-assignment-container">
+  <div class="form-header">
+    <h1 class="form-title">
+      <span class="title-icon">📋</span>
+      Assign New Task
+    </h1>
+    <p class="form-subtitle">Create and assign new marketing tasks to employees efficiently</p>
+  </div>
+
+  <form class="task-form" [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <!-- Employee Dropdown (Replaced with app-searchable-dropdown) -->
+      <div class="form-group full-width">
+        <label class="form-label">Employee Name *</label>
+        <app-searchable-dropdown
+          [options]="employeeOptions"
+          [disabled]="isDropdownDisabled"
+          (selectionChange)="onEmployeeSelect($event)">
+        </app-searchable-dropdown>
+        <div class="error-message" *ngIf="taskForm.get('employeeId')?.invalid && taskForm.get('employeeId')?.touched">
+          Please select an employee
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="taskDate">Date of Task *</label>
+        <input 
+          type="date" 
+          id="taskDate" 
+          class="form-control"
+          formControlName="taskDate"
+          [class.error]="taskForm.get('taskDate')?.invalid && taskForm.get('taskDate')?.touched">
+        <div class="error-message" *ngIf="taskForm.get('taskDate')?.invalid && taskForm.get('taskDate')?.touched">
+          Please select a task date
+        </div>
+      </div>
+    </div>
+
+    <!-- Hierarchical Location Selection -->
+    <div class="form-row">
+      <div class="form-group full-width">
+        <app-hierarchical-location-selector
+          [allowMultipleAreas]="true"
+          [autoSelectDelhi]="true"
+          (selectionChange)="onHierarchicalLocationChange($event)">
+        </app-hierarchical-location-selector>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="priority">Priority *</label>
+        <select 
+          id="priority"
+          class="form-control" 
+          formControlName="priority"
+          [class.error]="taskForm.get('priority')?.invalid && taskForm.get('priority')?.touched">
+          <option value="">Select Priority</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <div class="error-message" *ngIf="taskForm.get('priority')?.invalid && taskForm.get('priority')?.touched">
+          Please select priority
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="status">Status *</label>
+        <select 
+          id="status"
+          class="form-control" 
+          formControlName="status"
+          [class.error]="taskForm.get('status')?.invalid && taskForm.get('status')?.touched">
+          <option value="">Select Status</option>
+          <option *ngFor="let status of taskStatuses" [value]="status.name">{{ status.name }}</option>
+        </select>
+        <div class="error-message" *ngIf="taskForm.get('status')?.invalid && taskForm.get('status')?.touched">
+          Please select status
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="deadline">Task Deadline *</label>
+        <input 
+          type="date" 
+          id="deadline" 
+          formControlName="deadline"
+          [class.error]="taskForm.get('deadline')?.invalid && taskForm.get('deadline')?.touched">
+        <div class="error-message" *ngIf="taskForm.get('deadline')?.invalid && taskForm.get('deadline')?.touched">
+          Please select deadline
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Classification Section -->
+    <div class="form-section">
+      <h3 class="section-title">Task Classification</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="taskTypes">Task Types</label>
+          <div class="multi-select-container">
+            <div class="checkbox-group" *ngFor="let taskType of availableTaskTypes">
+              <label class="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  [value]="taskType.value"
+                  (change)="onTaskTypeSelectionChange($event, taskType.value)"
+                  class="checkbox-input">
+                <span class="checkbox-custom"></span>
+                <span class="checkbox-text">{{ taskType.label }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="department">Department</label>
+          <select id="department" class="form-control" formControlName="department">
+            <option value="Marketing">Marketing</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+            <option value="Customer Service">Customer Service</option>
+            <option value="Business Development">Business Development</option>
+            <option value="Research">Research</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="taskCategory">Task Category</label>
+          <select id="taskCategory" class="form-control" formControlName="taskCategory">
+            <option value="Field Work">Field Work</option>
+            <option value="Office Work">Office Work</option>
+            <option value="Client Work">Client Work</option>
+            <option value="Administrative">Administrative</option>
+            <option value="Research & Analysis">Research & Analysis</option>
+            <option value="Documentation">Documentation</option>
+            <option value="Coordination">Coordination</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="estimatedHours">Estimated Hours</label>
+          <input 
+            type="number" 
+            id="estimatedHours" 
+            class="form-control"
+            formControlName="estimatedHours"
+            placeholder="e.g., 8.5"
+            step="0.5"
+            min="0"
+            max="100">
+        </div>
+      </div>
+    </div>
+
+    <!-- Project & Client Information Section -->
+    <div class="form-section">
+      <h3 class="section-title">Project & Client Information</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="clientName">Consultant Name</label>
+          <input type="text" id="clientName" class="form-control" formControlName="clientName" placeholder="Enter consultant name (if applicable)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="projectCode">Camp Code</label>
+          <input type="text" id="projectCode" class="form-control" formControlName="projectCode" placeholder="e.g., AMI-2024-001">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="employeeIdNumber">Employee ID</label>
+          <input type="text" id="employeeIdNumber" class="form-control" formControlName="employeeIdNumber" placeholder="Enter employee ID number">
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Urgency -->
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="isUrgent" class="checkbox-input">
+        <span class="checkbox-custom"></span>
+        <span class="checkbox-text">Mark as Urgent Task</span>
+      </label>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="description">Task Description / Purpose *</label>
+      <textarea 
+        id="description" 
+        formControlName="description"
+        rows="4"
+        placeholder="Describe the task details, objectives, and requirements..."
+        [class.error]="taskForm.get('description')?.invalid && taskForm.get('description')?.touched"></textarea>
+      <div class="error-message" *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched">
+        Please enter task description
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="additionalNotes">Additional Notes & Instructions</label>
+      <textarea id="additionalNotes" formControlName="additionalNotes" rows="3" placeholder="Any additional notes, special instructions, or important information..."></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="resetForm()">Reset</button>
+      <button type="submit" class="btn-primary" [disabled]="taskForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Assign Task</span>
+        <span *ngIf="isLoading">Assigning...</span>
+      </button>
+    </div>
+  </form>
+
+  <!-- Success Message -->
+  <div class="success-message" *ngIf="showSuccess">
+    <div class="success-content">
+      <span class="success-icon">✓</span>
+      <span>Task assigned successfully! Employee will be notified.</span>
+    </div>
+  </div>
+</div>

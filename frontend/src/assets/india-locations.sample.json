@@ -1,0 +1,40 @@
+{
+  "states": [
+    { "stateId": 1, "stateName": "Delhi", "stateCode": "DL" },
+    { "stateId": 2, "stateName": "Maharashtra", "stateCode": "MH" },
+    { "stateId": 3, "stateName": "Karnataka", "stateCode": "KA" },
+    { "stateId": 5, "stateName": "Haryana", "stateCode": "HR" }
+  ],
+  "cities": [
+    { "cityId": 1, "cityName": "New Delhi", "stateId": 1 },
+    { "cityId": 2, "cityName": "South Delhi", "stateId": 1 },
+    { "cityId": 3, "cityName": "Mumbai", "stateId": 2 },
+    { "cityId": 4, "cityName": "Pune", "stateId": 2 },
+    { "cityId": 5, "cityName": "Bengaluru", "stateId": 3 },
+    { "cityId": 6, "cityName": "Gurugram", "stateId": 5 },
+    { "cityId": 7, "cityName": "Faridabad", "stateId": 5 }
+  ],
+  "areas": [
+    { "areaId": 1, "areaName": "Connaught Place", "stateId": 1, "cityId": 1 },
+    { "areaId": 2, "areaName": "Lajpat Nagar", "stateId": 1, "cityId": 2 },
+    { "areaId": 3, "areaName": "Chandni Chowk", "stateId": 1, "cityId": 1 },
+    { "areaId": 4, "areaName": "Saket", "stateId": 1, "cityId": 2 },
+    { "areaId": 6, "areaName": "Fort", "stateId": 2, "cityId": 3 },
+    { "areaId": 7, "areaName": "Shivajinagar", "stateId": 2, "cityId": 4 },
+    { "areaId": 8, "areaName": "Indiranagar", "stateId": 3, "cityId": 5 },
+    { "areaId": 9, "areaName": "Cyber City", "stateId": 5, "cityId": 6 },
+    { "areaId": 10, "areaName": "NIT", "stateId": 5, "cityId": 7 }
+  ],
+  "pincodes": [
+    { "pincodeId": 1, "pincodeValue": "110001", "areaId": 1, "localityName": "Connaught Place" },
+    { "pincodeId": 2, "pincodeValue": "110006", "areaId": 3, "localityName": "Chandni Chowk" },
+    { "pincodeId": 3, "pincodeValue": "110024", "areaId": 2, "localityName": "Lajpat Nagar" },
+    { "pincodeId": 4, "pincodeValue": "110017", "areaId": 4, "localityName": "Saket" },
+    { "pincodeId": 5, "pincodeValue": "400001", "areaId": 6, "localityName": "Fort" },
+    { "pincodeId": 6, "pincodeValue": "411005", "areaId": 7, "localityName": "Shivajinagar" },
+    { "pincodeId": 7, "pincodeValue": "560038", "areaId": 8, "localityName": "Indiranagar" },
+    { "pincodeId": 8, "pincodeValue": "122002", "areaId": 9, "localityName": "Cyber City" },
+    { "pincodeId": 9, "pincodeValue": "121001", "areaId": 10, "localityName": "NIT" }
+  ]
+}
+

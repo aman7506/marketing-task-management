@@ -1,0 +1,358 @@
+<div class="hierarchical-location-selector">
+  <div class="row g-3">
+    <!-- State Selection -->
+    <div class="col-md-4">
+      <label class="form-label fw-bold">
+        <i class="bi bi-geo-alt me-1"></i>State
+        <span class="text-danger" *ngIf="required">*</span>
+      </label>
+      <div class="dropdown-container">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            [class.is-invalid]="required && !selectedState"
+            placeholder="Search states..."
+            [(ngModel)]="stateSearchTerm"
+            (input)="onStateSearch($any($event.target).value)"
+            (click)="toggleStateDropdown()"
+            [disabled]="disabled"
+          >
+          <button 
+            class="btn btn-outline-secondary" 
+            type="button"
+            (click)="toggleStateDropdown()"
+            [disabled]="disabled"
+          >
+            <i class="bi bi-chevron-down" [class.rotate-180]="showStateDropdown"></i>
+          </button>
+          <button 
+            class="btn btn-outline-danger" 
+            type="button"
+            (click)="clearState()"
+            *ngIf="selectedState && !disabled"
+            title="Clear selection"
+          >
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        
+        <!-- State Dropdown -->
+        <div class="dropdown-menu custom-dropdown" [class.show]="showStateDropdown">
+          <div class="dropdown-search">
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Type to search states..."
+              [(ngModel)]="stateSearchTerm"
+              (input)="onStateSearch($any($event.target).value)"
+              (click)="$event.stopPropagation()"
+            >
+          </div>
+          
+          <div class="dropdown-items" *ngIf="!isLoadingStates">
+            <div 
+              class="dropdown-item custom-dropdown-item"
+              *ngFor="let state of filteredStates"
+              (click)="onStateSelect(state)"
+              [class.active]="selectedState?.id === state.id"
+            >
+              <i class="bi bi-geo-alt me-2"></i>
+              <span class="fw-medium">{{ state.name }}</span>
+              <small class="text-muted ms-auto">({{ state.code || '' }})</small>
+            </div>
+          </div>
+          
+          <div class="dropdown-loading" *ngIf="isLoadingStates">
+            <div class="text-center py-3">
+              <div class="spinner-border spinner-border-sm me-2"></div>
+              Loading states...
+            </div>
+          </div>
+          
+          <div class="dropdown-empty" *ngIf="!isLoadingStates && filteredStates.length === 0">
+            <div class="text-center py-3 text-muted">
+              <i class="bi bi-search me-2"></i>
+              No states found
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- City Selection -->
+    <div class="col-md-4">
+      <label class="form-label fw-bold">
+        <i class="bi bi-buildings me-1"></i>City
+      </label>
+      <div class="dropdown-container">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="selectedState ? 'Search cities...' : 'Select state first'"
+            [value]="selectedCity ? selectedCity.name : ''"
+            (click)="showCityDropdown = !showCityDropdown"
+            [disabled]="disabled || !selectedState"
+          >
+          <button 
+            class="btn btn-outline-secondary" 
+            type="button"
+            (click)="showCityDropdown = !showCityDropdown"
+            [disabled]="disabled || !selectedState"
+          >
+            <i class="bi bi-chevron-down" [class.rotate-180]="showCityDropdown"></i>
+          </button>
+          <button 
+            class="btn btn-outline-danger" 
+            type="button"
+            (click)="selectedCity = null; citySearchTerm='';"
+            *ngIf="selectedCity && !disabled"
+            title="Clear selection"
+          >
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <!-- City Dropdown -->
+        <div class="dropdown-menu custom-dropdown" [class.show]="showCityDropdown">
+          <div class="dropdown-search">
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Type to search cities..."
+              [(ngModel)]="citySearchTerm"
+              (input)="onCitySearch($any($event.target).value)"
+              (click)="$event.stopPropagation()"
+            >
+          </div>
+          <div class="dropdown-items">
+            <div 
+              class="dropdown-item custom-dropdown-item"
+              *ngFor="let city of filteredCities"
+              (click)="onCitySelect(city)"
+              [class.active]="selectedCity?.id === city.id"
+            >
+              <i class="bi bi-building me-2"></i>
+              <span class="fw-medium">{{ city.name }}</span>
+              <small class="text-muted ms-auto">{{ city.name || '' }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Area Selection -->
+    <div class="col-md-4">
+      <label class="form-label fw-bold">
+        <i class="bi bi-building me-1"></i>Area
+        <span class="text-danger" *ngIf="required && selectedState">*</span>
+      </label>
+      <div class="dropdown-container">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            [class.is-invalid]="required && selectedState && selectedAreas.length === 0"
+            [placeholder]="selectedState ? (allowMultipleAreas ? 'Select areas...' : 'Select area...') : 'Select state first'"
+            [value]="getSelectedAreasText()"
+            (click)="toggleAreaDropdown()"
+            [disabled]="disabled || !selectedState"
+          >
+          <button 
+            class="btn btn-outline-secondary" 
+            type="button"
+            (click)="toggleAreaDropdown()"
+            [disabled]="disabled || !selectedState"
+          >
+            <i class="bi bi-chevron-down" [class.rotate-180]="showAreaDropdown"></i>
+          </button>
+          <button 
+            class="btn btn-outline-danger" 
+            type="button"
+            (click)="clearAreas()"
+            *ngIf="selectedAreas.length > 0 && !disabled"
+            title="Clear selection"
+          >
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        
+        <!-- Selected Areas Display -->
+        <div class="selected-areas mt-2" *ngIf="selectedAreas.length > 0 && allowMultipleAreas">
+          <span 
+            class="badge bg-primary me-1 mb-1"
+            *ngFor="let area of selectedAreas"
+          >
+            {{ area.name }}
+            <button 
+              type="button" 
+              class="btn-close btn-close-white ms-1"
+              (click)="removeArea(area)"
+              *ngIf="!disabled"
+            ></button>
+          </span>
+        </div>
+        
+        <!-- Area Dropdown -->
+        <div class="dropdown-menu custom-dropdown" [class.show]="showAreaDropdown">
+          <div class="dropdown-search">
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Type to search areas..."
+              [(ngModel)]="areaSearchTerm"
+              (input)="onAreaSearch($any($event.target).value)"
+              (click)="$event.stopPropagation()"
+            >
+          </div>
+          
+          <div class="dropdown-items" *ngIf="!isLoadingAreas">
+            <div 
+              class="dropdown-item custom-dropdown-item"
+              *ngFor="let area of filteredAreas"
+              (click)="onAreaSelect(area)"
+              [class.active]="isAreaSelected(area)"
+            >
+              <div class="form-check" *ngIf="allowMultipleAreas">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  [checked]="isAreaSelected(area)"
+                  (click)="$event.stopPropagation()"
+                >
+                <label class="form-check-label">
+                  <i class="bi bi-building me-2"></i>
+                  <span class="fw-medium">{{ area.name }}</span>
+                  <small class="text-muted d-block">{{ area.name || area.name }}</small>
+                </label>
+              </div>
+              <div *ngIf="!allowMultipleAreas" class="d-flex align-items-center">
+                <i class="bi bi-building me-2"></i>
+                <div class="flex-grow-1">
+                  <span class="fw-medium">{{ area.name }}</span>
+                  <small class="text-muted d-block">{{ area.name || area.name }}</small>
+                </div>
+                <i class="bi bi-check text-success" *ngIf="isAreaSelected(area)"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="dropdown-loading" *ngIf="isLoadingAreas">
+            <div class="text-center py-3">
+              <div class="spinner-border spinner-border-sm me-2"></div>
+              Loading areas...
+            </div>
+          </div>
+          
+          <div class="dropdown-empty" *ngIf="!isLoadingAreas && filteredAreas.length === 0">
+            <div class="text-center py-3 text-muted">
+              <i class="bi bi-search me-2"></i>
+              No areas found
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pincode Selection -->
+    <div class="col-md-4">
+      <label class="form-label fw-bold">
+        <i class="bi bi-mailbox me-1"></i>Pincode
+      </label>
+      <div class="dropdown-container">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            [placeholder]="selectedAreas.length > 0 ? 'Search pincodes...' : 'Select area first'"
+            [value]="selectedPincode ? selectedPincode.value : ''"
+            (click)="togglePincodeDropdown()"
+            [disabled]="disabled || selectedAreas.length === 0"
+          >
+          <button 
+            class="btn btn-outline-secondary" 
+            type="button"
+            (click)="togglePincodeDropdown()"
+            [disabled]="disabled || selectedAreas.length === 0"
+          >
+            <i class="bi bi-chevron-down" [class.rotate-180]="showPincodeDropdown"></i>
+          </button>
+          <button 
+            class="btn btn-outline-danger" 
+            type="button"
+            (click)="clearPincode()"
+            *ngIf="selectedPincode && !disabled"
+            title="Clear selection"
+          >
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        
+        <!-- Pincode Dropdown -->
+        <div class="dropdown-menu custom-dropdown" [class.show]="showPincodeDropdown">
+          <div class="dropdown-search">
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Type to search pincodes..."
+              [(ngModel)]="pincodeSearchTerm"
+              (input)="onPincodeSearch($any($event.target).value)"
+              (click)="$event.stopPropagation()"
+            >
+          </div>
+          
+          <div class="dropdown-items" *ngIf="!isLoadingPincodes">
+            <div 
+              class="dropdown-item custom-dropdown-item"
+              *ngFor="let pincode of filteredPincodes"
+              (click)="onPincodeSelect(pincode)"
+              [class.active]="selectedPincode?.id === pincode.id"
+            >
+              <i class="bi bi-mailbox me-2"></i>
+              <div>
+                <span class="fw-medium">{{ pincode.value }}</span>
+                <small class="text-muted d-block" *ngIf="pincode.localityName">
+                  {{ pincode.localityName }}
+                </small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="dropdown-loading" *ngIf="isLoadingPincodes">
+            <div class="text-center py-3">
+              <div class="spinner-border spinner-border-sm me-2"></div>
+              Loading pincodes...
+            </div>
+          </div>
+          
+          <div class="dropdown-empty" *ngIf="!isLoadingPincodes && filteredPincodes.length === 0">
+            <div class="text-center py-3 text-muted">
+              <i class="bi bi-search me-2"></i>
+              No pincodes found
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selection Summary -->
+  <div class="selection-summary mt-3" *ngIf="selectedState">
+    <div class="card border-0 bg-light">
+      <div class="card-body py-2">
+        <small class="text-muted">
+          <i class="bi bi-info-circle me-1"></i>
+          <strong>Selected:</strong>
+          {{ selectedState.name }}
+          <ng-container *ngIf="selectedCity"> - {{ selectedCity.name }}</ng-container>
+          <ng-container *ngIf="selectedAreas.length > 0">
+            - {{ getSelectedAreaNames() }}
+          </ng-container>
+          <ng-container *ngIf="selectedPincode">
+            - {{ selectedPincode.value }}
+          </ng-container>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>

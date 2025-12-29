@@ -1,0 +1,19 @@
+const PROXY_CONFIG = {
+  "/api": {
+    target: "http://172.1.3.201:5000",
+    secure: false,
+    changeOrigin: true,
+    logLevel: "debug",
+    ws: false
+  },
+  "/notificationHub": {
+    target: "http://172.1.3.201:5000",
+    secure: false,
+    changeOrigin: true,
+    ws: true,
+    logLevel: "debug"
+  }
+};
+
+module.exports = PROXY_CONFIG;
+
