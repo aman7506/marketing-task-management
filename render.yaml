@@ -1,12 +1,11 @@
 services:
   - type: web
     name: marketing-api
-    runtime: dotnet
+    env: dotnet
     region: singapore
     plan: free
-    rootDir: backend
-    buildCommand: dotnet publish -c Release -o ./publish
-    startCommand: dotnet ./publish/MarketingTaskAPI.dll
+    buildCommand: cd backend && dotnet publish -c Release -o ./publish
+    startCommand: cd backend && dotnet ./publish/MarketingTaskAPI.dll
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production

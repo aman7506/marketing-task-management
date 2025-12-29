@@ -1,12 +1,14 @@
 [build]
   base = "frontend"
-  command = "npm run build"
-  publish = "frontend/dist/marketing-form/browser"
+  command = "npm ci && npm run build"
+  publish = "dist/marketing-form"
 
 [build.environment]
   NODE_VERSION = "18"
+  NPM_VERSION = "9"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
