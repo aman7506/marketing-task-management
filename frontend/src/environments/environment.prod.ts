@@ -1,4 +1,4 @@
-const serverBaseUrl = 'http://localhost:5005';
+const serverBaseUrl = 'https://marketing-api-u694.onrender.com';
 
 export const environment = {
   production: true,
